@@ -7,7 +7,7 @@ export const AppContext = createContext();
 export const AppContextProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [isSeller, setSeller] = useState(false);
+  const [isSeller, setIsSeller] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState({});
@@ -34,7 +34,7 @@ export const AppContextProvider = ({ children }) => {
   };
 
   // Update Cart Item Quantity
-  const updateCatItem = (itemId, quantity) => {
+  const updateCartItem = (itemId, quantity) => {
     let cartData = structuredClone(cartItems);
 
     cartData[itemId] = quantity;
@@ -85,14 +85,14 @@ export const AppContextProvider = ({ children }) => {
     user,
     setUser,
     isSeller,
-    setSeller,
+    setIsSeller,
     showUserLogin,
     setShowUserLogin,
     products,
     currency,
     cartItems,
     addToCart,
-    updateCatItem,
+    updateCartItem,
     removeFromCart,
     searchQuery,
     setSearchQuery,
