@@ -18,7 +18,7 @@ const port = process.env.PORT || 4000;
 //Allow multiple origins
 const allowedOrigins = ["http://localhost:5173"];
 
-app.post('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
+app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
 
 // connect Database
 await connectDB();
@@ -36,7 +36,8 @@ app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/order", orderRouter);
-
+/*
 app.listen(port, () => {
   console.log(`server is running on port : ${port}`);
 });
+*/
