@@ -1,5 +1,6 @@
 import React from "react";
 import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [state, setState] = React.useState("login");
@@ -7,24 +8,40 @@ const Login = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const { setShowUserLogin , setUser} = useAppContext();
-  const onSubmitHnadler = async (event)=>{
-    event.preventDefault();
-    setUser({
-        email: 'test@e.com',
-        name: "Asma",
+  const { setShowUserLogin, setUser, axios, navigate } = useAppContext();
+  const onSubmitHnadler = async (event) => {
+    // login or register
+    try {
+      event.preventDefault();
+      const { data } = await axios.post(`/api/user/${state}`, {
+        name,
+        email,
+        password,
+      });
 
-
-    })
-    setShowUserLogin(false);
-  }
+      if (data.success) {
+        localStorage.setItem("user", JSON.stringify(data.user)); // حفظ بيانات المستخدم
+        navigate("/");
+        setUser(data.user);
+        setShowUserLogin(false);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.success);
+    }
+  };
 
   return (
     <div
       onClick={() => setShowUserLogin(false)}
       className="fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center text-sm text-gray-600 bg-primary/50"
     >
-      <form onSubmit={onSubmitHnadler} onClick={(e)=> e.stopPropagation()} className="flex flex-col gap-4 m-auto items-start p-8 py-12 w-80 sm:w-[352px] text-gray-500 rounded-lg shadow-xl border border-gray-200 bg-white">
+      <form
+        onSubmit={onSubmitHnadler}
+        onClick={(e) => e.stopPropagation()}
+        className="flex flex-col gap-4 m-auto items-start p-8 py-12 w-80 sm:w-[352px] text-gray-500 rounded-lg shadow-xl border border-gray-200 bg-white"
+      >
         <p className="text-2xl font-medium m-auto">
           <span className="text-primary">User</span>{" "}
           {state === "login" ? "Login" : "Sign Up"}

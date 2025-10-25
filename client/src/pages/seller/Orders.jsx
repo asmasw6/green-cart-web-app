@@ -1,13 +1,23 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
-import { assets, dummyOrders } from "../../assets/assets";
+import { assets } from "../../assets/assets";
+import toast from "react-hot-toast";
 
 const Orders = () => {
-  const { currency } = useAppContext();
+  const { currency, axios } = useAppContext();
   const [orders, setOrders] = useState([]);
 
   const fetchOrders = async () => {
-    setOrders(dummyOrders);
+    try {
+      const { data } = await axios.get("/api/order/seller");
+      if (data.success) {
+        setOrders(data.orders);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   useEffect(() => {
@@ -29,7 +39,7 @@ const Orders = () => {
                 alt="boxIcon"
               />
               <div>
-                {order.items.map((item, index) => (
+                {order.items?.map((item, index) => (
                   <div key={index} className="flex flex-col ">
                     <p className="font-medium">
                       {item.product.name}{" "}

@@ -107,7 +107,7 @@ const ProductDetails = () => {
               </button>
               <button
                 onClick={() => {
-                  addToCart(product._id);
+                  //addToCart(product._id);
                   navigate("/cart");
                 }}
                 className="rounded-sm w-full py-3.5 cursor-pointer font-medium bg-primary text-white hover:bg-primary-dull transition"

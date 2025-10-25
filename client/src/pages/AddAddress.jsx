@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
+import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 // Input Field Component
 const InputField = ({ type, placeholder, name, handleChange, address }) => (
@@ -26,13 +28,36 @@ const AddAddress = () => {
     phone: "",
   });
 
+  const { axios, user, navigate } = useAppContext();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAddress((prevAddress) => ({ ...prevAddress, [name]: value }));
   };
   const onSubmitHandeler = async (e) => {
-    e.preventDefault();
+    try {
+      const { data } = await axios.post("/api/address/add", {
+        address,
+        userId: user._id,
+      });
+      if (data.success) {
+        toast.success(data.message);
+        setTimeout(() => {
+          navigate("/cart");
+        }, 500);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/cart");
+    }
+  }, []);
   return (
     <div className="mt-16 pb-16">
       <p className="text-2xl md:text-3xl text-gray-500">
@@ -41,7 +66,10 @@ const AddAddress = () => {
 
       <div className="flex flex-col-reverse md:flex-row justify-between mt-10 gap-5 ">
         <div className="flex-1 max-w-md ">
-          <form onSubmit={onSubmitHandeler} className="space-y-3 mt-6 text-sm mr-4">
+          <form
+            onSubmit={onSubmitHandeler}
+            className="space-y-3 mt-6 text-sm mr-4"
+          >
             <div className="grid grid-cols-2 gap-4">
               <InputField
                 handleChange={handleChange}
