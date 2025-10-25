@@ -13,8 +13,7 @@ export const authUser = async (req, res, next) => {
     if (tokenDecode.id) {
      // req.userId = tokenDecode.id; 
      req.body.userId = tokenDecode.id;
-      console.log("<< req.body >>: "+ req.body)
-      console.log("<< req.body.userId >>: "+ req.body.userId)
+     
     } else {
       return res.json({ success: false, message: "Not Authorized" });
     }
