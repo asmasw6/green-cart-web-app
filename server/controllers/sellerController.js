@@ -17,6 +17,7 @@ export const sellerLogin = async (req, res) => {
       password === process.env.SELLER_PASSWORD &&
       email === process.env.SELLER_EMAIL
     ) {
+      console.log(" >>>>>>")
       const token = generateToken(email.toString());
       res.cookie("sellerToken", token, {
         httpOnly: true, // preven javascript to access cookie
