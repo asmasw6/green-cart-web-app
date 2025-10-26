@@ -1,4 +1,3 @@
-import { Description } from "@radix-ui/react-toast";
 import mongoose from "mongoose";
 
 const addressSchema = new mongoose.Schema(
