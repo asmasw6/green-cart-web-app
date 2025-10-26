@@ -1,6 +1,5 @@
 import toast from "react-hot-toast";
 import { useAppContext } from "../../context/AppContext";
-import { Profiler } from "react";
 
 const ProductList = () => {
   const { products, currency, axios, fetchProducts } = useAppContext();
