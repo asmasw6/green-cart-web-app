@@ -130,12 +130,12 @@ export const stripeWebhooks = async (request, response) => {
       // mark payment as paid
       await Order.findByIdAndUpdate(orderId, { isPaid: true });
       // clear user cart
-      console.log(" // clear user cart " + userId + " ??? ");
-      await User.findByIdAndUpdate(
-        userId,
-        { $set: { cartItems: {} } },
-        { new: true }
-      );
+      //await User.findByIdAndUpdate(userId, { cartItems: {} });
+      const user = await User.findById(userId);
+      if (user) {
+        user.cartItems = {};
+        await user.save();
+      }
       break;
     }
     case "payment_intent.payment_failed": {
