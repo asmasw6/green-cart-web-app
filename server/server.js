@@ -17,8 +17,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 //Allow multiple origins
-// "http://localhost:5173",
-const allowedOrigins = [ "https://greencart-chi-kohl.vercel.app"];
+const allowedOrigins = ["https://greencart-chi-kohl.vercel.app", "http://localhost:5173"];
 
 app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
 
@@ -38,7 +37,6 @@ app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/order", orderRouter);
-
 
 app.listen(port, () => {
   console.log(`server is running on port : ${port}`);
