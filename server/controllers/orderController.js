@@ -126,6 +126,8 @@ export const stripeWebhooks = async (request, response) => {
       });
 
       const { orderId, userId } = session.data[0].metadata;
+      console.log("Session metadata:", session.data[0].metadata);
+
 
       // mark payment as paid
       await Order.findByIdAndUpdate(orderId, { isPaid: true });
@@ -149,6 +151,9 @@ export const stripeWebhooks = async (request, response) => {
 
       const { orderId } = session.data[0].metadata;
       await Order.findByIdAndDelete(orderId);
+
+      console.log("🟢 Payment succeeded for user:", userId);
+
       break;
     }
 
