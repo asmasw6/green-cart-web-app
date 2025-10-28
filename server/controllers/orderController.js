@@ -63,7 +63,7 @@ export const placeOrderStripe = async (req, res) => {
     });
 
     //Stripe getway initialize
-    const stripeInstance = new stripe(process.env.STRIPE_SKEY);
+    const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
     // craete line items for stripe    process.env.STRIPE_PUPLICKKEY,
     const line_items = productData.map((item) => {
       return {
@@ -99,7 +99,7 @@ export const placeOrderStripe = async (req, res) => {
 // Stripe webhooks to verify payments action: /stripe
 export const stripeWebhooks = async (request, response) => {
   // Stripe Gateway initalize
-  const stripeInstance = new stripe(process.env.STRIPE_SKEY);
+  const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
 
   const sig = request.headers["stripe-signature"];
   let event;
@@ -115,6 +115,8 @@ export const stripeWebhooks = async (request, response) => {
   }
 
   //Handle the event
+  console.log("📦 Received event:", event.type);
+
   switch (event.type) {
     case "payment_intent.succeeded": {
       const paymentIntent = event.data.object;
@@ -127,7 +129,6 @@ export const stripeWebhooks = async (request, response) => {
 
       const { orderId, userId } = session.data[0].metadata;
       console.log("Session metadata:", session.data[0].metadata);
-
 
       // mark payment as paid
       await Order.findByIdAndUpdate(orderId, { isPaid: true });
